@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "368567619987",
+    "project_id": "mixfolio-a4b83",
+    "storage_bucket": "mixfolio-a4b83.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:368567619987:android:bfe06c4872433bd1aa9866",
+        "android_client_info": {
+          "package_name": "com.jjmf.mixfolio"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "368567619987-gfuc6tukaq1l186nd4cnk513k1fgirbu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBExUhRGdbzLKx5z1kLB93Czt3654014XM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "368567619987-gfuc6tukaq1l186nd4cnk513k1fgirbu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
