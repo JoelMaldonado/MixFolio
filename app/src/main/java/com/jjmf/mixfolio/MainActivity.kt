@@ -3,6 +3,7 @@ package com.jjmf.mixfolio
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import com.jjmf.mixfolio.ui.navigation.NavegacionPrincipal
 import com.jjmf.mixfolio.ui.theme.MixFolioTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -12,7 +13,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             MixFolioTheme {
-
+                NavegacionPrincipal()
             }
         }
     }
