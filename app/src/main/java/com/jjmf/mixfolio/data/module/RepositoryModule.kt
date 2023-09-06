@@ -1,7 +1,9 @@
 package com.jjmf.mixfolio.data.module
 
-import com.jjmf.mixfolio.data.repository.TragoRepository
-import com.jjmf.mixfolio.domain.repository.TragoRepositoryImpl
+import com.jjmf.mixfolio.data.repository.CocktailRepository
+import com.jjmf.mixfolio.data.repository.IngredienteRepository
+import com.jjmf.mixfolio.domain.repository.CocktailRepositoryImpl
+import com.jjmf.mixfolio.domain.repository.IngredienteRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -12,6 +14,9 @@ import dagger.hilt.components.SingletonComponent
 abstract class RepositoryModule {
 
     @Binds
-    abstract fun tragoRepo(impl : TragoRepositoryImpl) : TragoRepository
+    abstract fun cocktailRepo(impl : CocktailRepositoryImpl) : CocktailRepository
+
+    @Binds
+    abstract fun ingredienteRepo(impl : IngredienteRepositoryImpl) : IngredienteRepository
 
 }

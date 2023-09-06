@@ -1,8 +1,9 @@
-package com.jjmf.mixfolio.ui.features.Agregar.components
+package com.jjmf.mixfolio.ui.features.Cocktail.Agregar.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -22,12 +23,13 @@ import androidx.compose.ui.unit.dp
 import com.jjmf.mixfolio.domain.model.Ingrediente
 import com.jjmf.mixfolio.domain.model.TipoIngrediente
 import com.jjmf.mixfolio.domain.model.listIngredientes
-import com.jjmf.mixfolio.ui.features.Detalle.CardIngrediente
+import com.jjmf.mixfolio.ui.features.Cocktail.Detalle.CardIngrediente
 import com.jjmf.mixfolio.ui.theme.ColorFondo
 import com.jjmf.mixfolio.ui.theme.ColorP1
 
 @Composable
 fun AgregarIngredienteSheet(
+    modifier: Modifier,
     click: (Ingrediente) -> Unit,
 ) {
     val listTotal = listIngredientes
@@ -35,7 +37,7 @@ fun AgregarIngredienteSheet(
     val isSelected = remember { mutableStateOf("Todos") }
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .padding(15.dp),
         verticalArrangement = Arrangement.spacedBy(15.dp)

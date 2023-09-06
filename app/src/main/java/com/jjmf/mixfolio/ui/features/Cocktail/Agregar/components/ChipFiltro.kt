@@ -1,4 +1,4 @@
-package com.jjmf.mixfolio.ui.features.Agregar.components
+package com.jjmf.mixfolio.ui.features.Cocktail.Agregar.components
 
 import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.ElevatedAssistChip

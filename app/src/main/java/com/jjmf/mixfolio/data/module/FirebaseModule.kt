@@ -26,13 +26,22 @@ class FirebaseModule {
     @Retention(AnnotationRetention.BINARY)
     annotation class UsuarioCollection
 
-    @TragoCollection
+    @CocktailCollection
     @Singleton
     @Provides
-    fun provideTrago() = provideFirebase().collection(Constants.FB_TRAGOS)
+    fun provideCocktail() = provideFirebase().collection(Constants.FB_COCKTAIL)
 
     @Qualifier
     @Retention(AnnotationRetention.BINARY)
-    annotation class TragoCollection
+    annotation class CocktailCollection
+
+    @IngredientesCollection
+    @Singleton
+    @Provides
+    fun provideIngrediente() = provideFirebase().collection(Constants.FB_INGREDIENTES)
+
+    @Qualifier
+    @Retention(AnnotationRetention.BINARY)
+    annotation class IngredientesCollection
 
 }

@@ -99,6 +99,9 @@ dependencies {
 
     //Firebase Storage
     implementation "com.google.firebase:firebase-storage-ktx"
+    
+    //Compressor
+    implementation 'id.zelory:compressor:3.0.1'
 
     //Auth
     implementation "com.google.firebase:firebase-auth-ktx"
