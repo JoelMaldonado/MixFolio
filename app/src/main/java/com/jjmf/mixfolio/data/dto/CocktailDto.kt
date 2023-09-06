@@ -9,7 +9,7 @@ data class CocktailDto(
     val preparacion: String? = null,
     val precio:Double? = null,
     val img: String? = null,
-    val ingredientes : List<IngredienteDto>? = null,
+    val ingredientes: List<IngredienteDto>?,
     val favorito: Boolean? = null
 ) {
     fun toDomain(): Cocktail {

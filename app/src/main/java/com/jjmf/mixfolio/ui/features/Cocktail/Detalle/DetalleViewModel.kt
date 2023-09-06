@@ -23,7 +23,7 @@ class DetalleViewModel @Inject constructor(
     fun init(id: String) {
         viewModelScope.launch(Dispatchers.IO){
             try {
-                repository.get(id)
+                cocktail = repository.get(id)
             }catch (e:Exception){
                 error = e.message
             }

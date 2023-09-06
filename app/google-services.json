@@ -14,7 +14,15 @@
       },
       "oauth_client": [
         {
-          "client_id": "368567619987-gfuc6tukaq1l186nd4cnk513k1fgirbu.apps.googleusercontent.com",
+          "client_id": "368567619987-trvp99j3la0su4m2v8djqq9nsgairlb8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jjmf.mixfolio",
+            "certificate_hash": "d2f6c98ce0fca49c2ebb9f266b64d63cad71149c"
+          }
+        },
+        {
+          "client_id": "368567619987-bmrb1fla8i12i7vdbss6ihlpusridhub.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -27,7 +35,7 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "368567619987-gfuc6tukaq1l186nd4cnk513k1fgirbu.apps.googleusercontent.com",
+              "client_id": "368567619987-bmrb1fla8i12i7vdbss6ihlpusridhub.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

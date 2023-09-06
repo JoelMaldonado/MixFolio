@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jjmf.mixfolio.core.EstadosResult
 import com.jjmf.mixfolio.data.dto.CocktailDto
+import com.jjmf.mixfolio.data.dto.IngredienteDto
 import com.jjmf.mixfolio.data.repository.CocktailRepository
 import com.jjmf.mixfolio.domain.model.Ingrediente
 import com.jjmf.mixfolio.domain.usecase.SubirImagenUsecase
@@ -44,7 +45,8 @@ class AddTragoViewModel @Inject constructor(
                     nombre = nombre,
                     preparacion = preparacion,
                     precio = precio.toDoubleOrNull(),
-                    img = subirImagenUsecase(img)
+                    img = subirImagenUsecase(img),
+                    ingredientes = listIngredientes.map { it.toDto() }
                 )
                 when (val res = repository.add(cocktailDto)) {
                     is EstadosResult.Correcto -> if (res.datos == true) back = true

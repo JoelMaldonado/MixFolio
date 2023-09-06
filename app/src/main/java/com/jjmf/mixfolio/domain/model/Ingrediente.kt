@@ -2,12 +2,21 @@ package com.jjmf.mixfolio.domain.model
 
 import androidx.annotation.DrawableRes
 import com.jjmf.mixfolio.R
+import com.jjmf.mixfolio.data.dto.IngredienteDto
 
 data class Ingrediente(
     val nombre: String,
     @DrawableRes val img: Int,
     val tipo: TipoIngrediente,
-)
+){
+    fun toDto() : IngredienteDto{
+        return IngredienteDto(
+            nombre = nombre,
+            img = img,
+            tipo = tipo.name
+        )
+    }
+}
 
 enum class TipoIngrediente {
     Alcohol,

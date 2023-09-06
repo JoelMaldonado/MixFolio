@@ -49,9 +49,11 @@ class CocktailRepositoryImpl @Inject constructor(
     }
 
     override suspend fun get(id: String): Cocktail? {
-        return fb.document(id).get().await().toObject(CocktailDto::class.java).also {
+        val cock =  fb.document(id).get().await().toObject(CocktailDto::class.java).also {
             it?.id = id
         }?.toDomain()
+
+        return cock
     }
 
 }

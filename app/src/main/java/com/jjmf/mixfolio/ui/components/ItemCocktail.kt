@@ -69,6 +69,11 @@ fun ItemCocktail(
                     color = Color.White,
                     fontWeight = FontWeight.Medium
                 )
+                Text(
+                    text = cocktail.id,
+                    color = Color.White,
+                    fontSize = 12.sp
+                )
             }
 
             IconButton(

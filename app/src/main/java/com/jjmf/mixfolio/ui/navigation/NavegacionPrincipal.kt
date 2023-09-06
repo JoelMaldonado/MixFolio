@@ -1,6 +1,7 @@
 package com.jjmf.mixfolio.ui.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -25,6 +26,7 @@ fun NavegacionPrincipal() {
         composable(Rutas.Login.url) {
             LoginScreen(
                 toMenu = {
+
                     navController.navigate(Rutas.Menu.url)
                 }
             )
@@ -43,6 +45,9 @@ fun NavegacionPrincipal() {
                 },
                 toAddIngrediente = {
                     navController.navigate(Rutas.Ingrediente.Add.url)
+                },
+                back = {
+                    navController.popBackStack()
                 }
             )
         }

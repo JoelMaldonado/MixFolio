@@ -1,6 +1,7 @@
 package com.jjmf.mixfolio.ui.features.Cocktail.Detalle
 
 import androidx.annotation.DrawableRes
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -16,10 +17,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -39,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
+import coil.compose.SubcomposeAsyncImage
 import com.jjmf.mixfolio.R
 import com.jjmf.mixfolio.ui.theme.ColorDivider
 import com.jjmf.mixfolio.ui.theme.ColorFondo
@@ -49,11 +53,11 @@ import com.jjmf.mixfolio.ui.theme.ColorTitulo
 
 @Composable
 fun DetailCocktailScreen(
-    id:String,
+    id: String,
     viewModel: DetalleViewModel = hiltViewModel(),
 ) {
 
-    LaunchedEffect(key1 = Unit){
+    LaunchedEffect(key1 = Unit) {
         viewModel.init(id)
     }
 
@@ -75,7 +79,11 @@ fun DetailCocktailScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(5.dp)
             ) {
-                Text(text = "${viewModel.cocktail?.nombre}", color = Color.White, fontWeight = FontWeight.Medium)
+                Text(
+                    text = "${viewModel.cocktail?.nombre}",
+                    color = Color.White,
+                    fontWeight = FontWeight.Medium
+                )
                 Divider(
                     modifier = Modifier.width(60.dp),
                     color = ColorDivider
@@ -88,14 +96,25 @@ fun DetailCocktailScreen(
                 )
             }
 
-            AsyncImage(
+            SubcomposeAsyncImage(
                 model = viewModel.cocktail?.img,
                 contentDescription = null,
-                error = painterResource(id = R.drawable.img_trago),
+                error = {
+                    Image(
+                        painter = painterResource(id = R.drawable.img_trago),
+                        contentDescription = null
+                    )
+                },
                 modifier = Modifier
                     .weight(1f)
-                    .fillMaxHeight(),
-                contentScale = ContentScale.FillHeight
+                    .fillMaxHeight()
+                    .clip(RoundedCornerShape(15.dp)),
+                contentScale = ContentScale.FillHeight,
+                loading = {
+                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        CircularProgressIndicator()
+                    }
+                }
             )
 
         }
@@ -110,13 +129,23 @@ fun DetailCocktailScreen(
                     .clip(CircleShape)
                     .background(ColorP2)
             )
-            Text(text = "Lista de Ingredientes", color = Color.White, fontWeight = FontWeight.Medium)
+            Text(
+                text = "Lista de Ingredientes",
+                color = Color.White,
+                fontWeight = FontWeight.Medium
+            )
         }
 
         Row(
             modifier = Modifier.horizontalScroll(rememberScrollState()),
             horizontalArrangement = Arrangement.spacedBy(15.dp)
         ) {
+            Text(text = viewModel.cocktail?.ingredientes.toString())
+            viewModel.cocktail?.ingredientes?.forEach {
+                CardIngrediente(modifier = Modifier.width(70.dp), text = it.nombre, ic = it.img) {
+
+                }
+            }
 
         }
 
@@ -126,9 +155,9 @@ fun DetailCocktailScreen(
 @Composable
 fun CardIngrediente(
     modifier: Modifier,
-    text:String,
-    @DrawableRes ic:Int,
-    click:()->Unit
+    text: String,
+    @DrawableRes ic: Int,
+    click: () -> Unit,
 ) {
     Card(
         modifier = modifier,

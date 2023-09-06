@@ -9,8 +9,9 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
 
 private val LightColorScheme = lightColorScheme(
-    primary = ColorCard,
-    secondary = ColorS1
+    primary = ColorP1,
+    secondary = ColorS1,
+    background = ColorFondo
 )
 
 @Composable
@@ -23,7 +24,7 @@ fun MixFolioTheme(
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            window.statusBarColor = colorScheme.primary.toArgb()
+            window.statusBarColor = ColorCard.hashCode()
         }
     }
 
