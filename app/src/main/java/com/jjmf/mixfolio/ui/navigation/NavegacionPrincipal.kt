@@ -1,15 +1,13 @@
 package com.jjmf.mixfolio.ui.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.google.firebase.auth.FirebaseAuth
 import com.jjmf.mixfolio.ui.features.Cocktail.Agregar.AddCocktailScreen
 import com.jjmf.mixfolio.ui.features.Cocktail.CocktailScreen
 import com.jjmf.mixfolio.ui.features.Cocktail.Detalle.DetailCocktailScreen
-import com.jjmf.mixfolio.ui.features.Ingredientes.Agregar.AddIngredienteScreen
-import com.jjmf.mixfolio.ui.features.Ingredientes.IngredientesScreen
 import com.jjmf.mixfolio.ui.features.Login.LoginScreen
 import com.jjmf.mixfolio.ui.features.Menu.MenuScreen
 
@@ -20,7 +18,9 @@ fun NavegacionPrincipal() {
 
     NavHost(
         navController = navController,
-        startDestination = Rutas.Login.url
+        startDestination =
+        if (FirebaseAuth.getInstance().currentUser != null) Rutas.Menu.url
+        else Rutas.Login.url
     ) {
 
         composable(Rutas.Login.url) {
@@ -40,12 +40,6 @@ fun NavegacionPrincipal() {
                 toAddCocktail = {
                     navController.navigate(Rutas.Cocktail.Add.url)
                 },
-                toIngredientes = {
-                    navController.navigate(Rutas.Ingrediente.url)
-                },
-                toAddIngrediente = {
-                    navController.navigate(Rutas.Ingrediente.Add.url)
-                },
                 back = {
                     navController.popBackStack()
                 }
@@ -54,7 +48,7 @@ fun NavegacionPrincipal() {
 
         composable(Rutas.Cocktail.url) {
             CocktailScreen(
-                toDetalle = {id->
+                toDetalle = { id ->
                     navController.navigate(Rutas.Cocktail.Detail.sendId(id))
                 }
             )
@@ -69,16 +63,9 @@ fun NavegacionPrincipal() {
         }
 
         composable(Rutas.Cocktail.Detail.url) {
-            it.arguments?.getString("id")?.let {id->
+            it.arguments?.getString("id")?.let { id ->
                 DetailCocktailScreen(id)
             }
-        }
-
-        composable(Rutas.Ingrediente.url){
-            IngredientesScreen()
-        }
-        composable(Rutas.Ingrediente.Add.url){
-            AddIngredienteScreen()
         }
 
     }

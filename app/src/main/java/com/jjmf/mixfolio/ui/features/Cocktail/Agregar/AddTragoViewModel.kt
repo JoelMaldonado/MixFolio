@@ -1,16 +1,17 @@
 package com.jjmf.mixfolio.ui.features.Cocktail.Agregar
 
 import android.net.Uri
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.auth.FirebaseAuth
 import com.jjmf.mixfolio.core.EstadosResult
 import com.jjmf.mixfolio.data.dto.CocktailDto
-import com.jjmf.mixfolio.data.dto.IngredienteDto
 import com.jjmf.mixfolio.data.repository.CocktailRepository
+import com.jjmf.mixfolio.data.repository.IngredienteRepository
 import com.jjmf.mixfolio.domain.model.Ingrediente
 import com.jjmf.mixfolio.domain.usecase.SubirImagenUsecase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,8 +23,11 @@ import javax.inject.Inject
 class AddTragoViewModel @Inject constructor(
     private val repository: CocktailRepository,
     private val subirImagenUsecase: SubirImagenUsecase,
+    private val repoIng: IngredienteRepository
 ) : ViewModel() {
 
+    var buscar by mutableStateOf("")
+    var isBuscar by mutableStateOf(false)
     var ingrediente by mutableStateOf("")
     var img by mutableStateOf<Uri?>(null)
     var nombre by mutableStateOf("")
@@ -31,7 +35,10 @@ class AddTragoViewModel @Inject constructor(
     var preparacion by mutableStateOf("")
     var precio by mutableStateOf("")
 
-    var listIngredientes = mutableStateListOf<Ingrediente>()
+    var listIngredientAdd = mutableStateListOf<Ingrediente>()
+
+    var listIngredientesTotal = emptyList<Ingrediente>()
+    var listIngredients by mutableStateOf(listIngredientesTotal)
 
     var cargando by mutableStateOf(false)
     var back by mutableStateOf(false)
@@ -46,7 +53,9 @@ class AddTragoViewModel @Inject constructor(
                     preparacion = preparacion,
                     precio = precio.toDoubleOrNull(),
                     img = subirImagenUsecase(img),
-                    ingredientes = listIngredientes.map { it.toDto() }
+                    ingredientes = listIngredientAdd.map { it.id },
+                    favorito = false,
+                    usuario = FirebaseAuth.getInstance().currentUser?.uid
                 )
                 when (val res = repository.add(cocktailDto)) {
                     is EstadosResult.Correcto -> if (res.datos == true) back = true
@@ -56,6 +65,19 @@ class AddTragoViewModel @Inject constructor(
                 error = e.message
             } finally {
                 cargando = false
+            }
+        }
+    }
+
+    fun init() {
+        viewModelScope.launch(Dispatchers.IO){
+            try {
+                repoIng.getFlow().collect{
+                    listIngredientesTotal = it
+                    listIngredients = listIngredientesTotal
+                }
+            }catch (e:Exception){
+
             }
         }
     }

@@ -25,9 +25,7 @@ import com.jjmf.mixfolio.ui.theme.ColorFondo
 fun MenuScreen(
     toCocktail: () -> Unit,
     toAddCocktail: () -> Unit,
-    toIngredientes: () -> Unit,
-    toAddIngrediente: () -> Unit,
-    back:()->Unit,
+    back: () -> Unit,
     viewModel: MenuViewModel = hiltViewModel(),
 ) {
 
@@ -46,14 +44,12 @@ fun MenuScreen(
         )
         Button(onClick = toCocktail) { Text(text = "Ver Cocktails") }
         Button(onClick = toAddCocktail) { Text(text = "Agregar Cocktail") }
-        Button(onClick = toIngredientes) { Text(text = "Ver Ingredientes") }
-        Button(onClick = toAddIngrediente) { Text(text = "Agregar Ingrediente") }
-        Button(onClick = { }) { Text(text = "Favoritos") }
-
-        IconButton(onClick = {
-            FirebaseAuth.getInstance().signOut()
-            back()
-        }) {
+        IconButton(
+            onClick = {
+                FirebaseAuth.getInstance().signOut()
+                back()
+            }
+        ) {
             Icon(imageVector = Icons.Default.Logout, contentDescription = null)
         }
     }

@@ -109,12 +109,6 @@ fun BotonGoogle(
     val context = LocalContext.current
     val firebaseAuth = FirebaseAuth.getInstance()
 
-    LaunchedEffect(key1 = firebaseAuth.currentUser) {
-        if (firebaseAuth.currentUser != null) {
-            viewModel.toMenu = true
-        }
-    }
-
     val googleSignInLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
     ) { result ->

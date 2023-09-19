@@ -32,6 +32,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -44,6 +45,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import coil.compose.SubcomposeAsyncImage
 import com.jjmf.mixfolio.R
+import com.jjmf.mixfolio.ui.theme.ColorCard
 import com.jjmf.mixfolio.ui.theme.ColorDivider
 import com.jjmf.mixfolio.ui.theme.ColorFondo
 import com.jjmf.mixfolio.ui.theme.ColorP1
@@ -64,60 +66,117 @@ fun DetailCocktailScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(ColorFondo)
-            .padding(15.dp),
+            .background(ColorFondo),
         verticalArrangement = Arrangement.spacedBy(15.dp)
     ) {
-        Row(
+
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(250.dp)
+                .height(250.dp),
+            contentAlignment = Alignment.BottomCenter
         ) {
-
-            Column(
-                modifier = Modifier.weight(1f),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(5.dp)
-            ) {
-                Text(
-                    text = "${viewModel.cocktail?.nombre}",
-                    color = Color.White,
-                    fontWeight = FontWeight.Medium
-                )
-                Divider(
-                    modifier = Modifier.width(60.dp),
-                    color = ColorDivider
-                )
-                Text(text = "Descripcion", fontSize = 12.sp, color = ColorTitulo)
-                Text(
-                    text = viewModel.cocktail?.preparacion.toString(),
-                    fontSize = 14.sp,
-                    color = ColorTextos, lineHeight = 16.sp
-                )
-            }
-
-            SubcomposeAsyncImage(
+            AsyncImage(
                 model = viewModel.cocktail?.img,
                 contentDescription = null,
-                error = {
-                    Image(
-                        painter = painterResource(id = R.drawable.img_trago),
-                        contentDescription = null
-                    )
-                },
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxHeight()
-                    .clip(RoundedCornerShape(15.dp)),
-                contentScale = ContentScale.FillHeight,
-                loading = {
-                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        CircularProgressIndicator()
-                    }
-                }
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop
             )
-
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(100.dp)
+                    .background(
+                        brush = Brush.verticalGradient(
+                            listOf(
+                                Color.Transparent,
+                                ColorCard
+                            )
+                        )
+                    ),
+                contentAlignment = Alignment.BottomStart
+            ) {
+                Text(
+                    text = viewModel.cocktail?.nombre ?: "Sin Data",
+                    color = Color.White,
+                    modifier = Modifier.padding(start = 15.dp, bottom = 15.dp),
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 24.sp
+                )
+            }
         }
+        /*
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(250.dp)
+                ) {
+
+                    Column(
+                        modifier = Modifier.weight(1f),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(5.dp)
+                    ) {
+                        Text(
+                            text = "${viewModel.cocktail?.nombre}",
+                            color = Color.White,
+                            fontWeight = FontWeight.Medium
+                        )
+                        Divider(
+                            modifier = Modifier.width(60.dp),
+                            color = ColorDivider
+                        )
+                        Text(text = "Preparación", fontSize = 12.sp, color = ColorTitulo)
+                        Text(
+                            text = viewModel.cocktail?.preparacion.toString(),
+                            fontSize = 14.sp,
+                            color = ColorTextos, lineHeight = 16.sp
+                        )
+                    }
+
+                    SubcomposeAsyncImage(
+                        model = viewModel.cocktail?.img,
+                        contentDescription = null,
+                        error = {
+                            Image(
+                                painter = painterResource(id = R.drawable.img_trago),
+                                contentDescription = null
+                            )
+                        },
+                        modifier = Modifier
+                            .weight(1f)
+                            .fillMaxHeight()
+                            .clip(RoundedCornerShape(15.dp)),
+                        contentScale = ContentScale.FillHeight,
+                        loading = {
+                            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                                CircularProgressIndicator()
+                            }
+                        }
+                    )
+
+                }*/
+
+
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(5.dp)
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(15.dp)
+                    .clip(CircleShape)
+                    .background(ColorP2)
+            )
+            Text(
+                text = "Preparación",
+                color = Color.White,
+                fontWeight = FontWeight.Medium
+            )
+        }
+
+        Text(text = viewModel.cocktail?.preparacion ?: "Sin Data", color = Color.White)
 
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -140,9 +199,12 @@ fun DetailCocktailScreen(
             modifier = Modifier.horizontalScroll(rememberScrollState()),
             horizontalArrangement = Arrangement.spacedBy(15.dp)
         ) {
-            Text(text = viewModel.cocktail?.ingredientes.toString())
             viewModel.cocktail?.ingredientes?.forEach {
-                CardIngrediente(modifier = Modifier.width(70.dp), text = it.nombre, ic = it.img) {
+                CardIngrediente(
+                    modifier = Modifier.width(70.dp),
+                    text = it.nombre,
+                    img = it.img
+                ) {
 
                 }
             }
@@ -156,7 +218,7 @@ fun DetailCocktailScreen(
 fun CardIngrediente(
     modifier: Modifier,
     text: String,
-    @DrawableRes ic: Int,
+    img: String,
     click: () -> Unit,
 ) {
     Card(
@@ -172,7 +234,7 @@ fun CardIngrediente(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             AsyncImage(
-                model = ic,
+                model = img,
                 contentDescription = null,
                 modifier = Modifier.size(70.dp),
                 contentScale = ContentScale.FillHeight

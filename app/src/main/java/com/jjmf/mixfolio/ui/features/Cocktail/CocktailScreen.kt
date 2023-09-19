@@ -1,5 +1,6 @@
 package com.jjmf.mixfolio.ui.features.Cocktail
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -35,6 +36,7 @@ fun CocktailScreen(
 
     viewModel.error?.let {
         context.show(it)
+        Log.d("tagito", it)
         viewModel.error = null
     }
 

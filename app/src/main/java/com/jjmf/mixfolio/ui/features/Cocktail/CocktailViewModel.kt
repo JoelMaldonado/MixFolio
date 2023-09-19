@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CocktailViewModel @Inject constructor(
-    private val repository: CocktailRepository,
+    private val repository: CocktailRepository
 ) : ViewModel() {
 
     var buscar by mutableStateOf("")
@@ -28,9 +28,7 @@ class CocktailViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO){
             try {
                 cargando = true
-                repository.getFlow().collect{
-                    listCocktails = it
-                }
+                listCocktails = repository.getList()
             }catch (e:Exception){
                 error = e.message
             }finally {

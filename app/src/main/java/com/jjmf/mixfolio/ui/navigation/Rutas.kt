@@ -9,7 +9,4 @@ sealed class Rutas(val url:String){
             fun sendId(id:String) = "detail_cocktail?$id"
         }
     }
-    object Ingrediente : Rutas(url = "ingrediente"){
-        object Add : Rutas(url = "add_ingrediente")
-    }
 }
