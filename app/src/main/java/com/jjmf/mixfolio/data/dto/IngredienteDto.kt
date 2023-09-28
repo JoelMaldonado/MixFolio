@@ -8,7 +8,8 @@ data class IngredienteDto(
     @get:Exclude var id:String? = null,
     val nombre: String? = null,
     val img: String? = null,
-    val tipo: String? = null
+    val tipo: String? = null,
+    val cant:String? = null
 ){
     fun toDomain() : Ingrediente{
         return Ingrediente(
@@ -16,7 +17,7 @@ data class IngredienteDto(
             nombre = nombre ?: "Sin Data",
             img = img ?: "Sin Data",
             tipo = TipoIngrediente.valueOf(tipo ?: "Comun"),
-            cant = "1"
+            cant = cant ?: "Sin Data"
         )
     }
 }

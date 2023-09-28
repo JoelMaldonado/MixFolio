@@ -59,12 +59,6 @@ fun ItemCocktail(
                 modifier = Modifier.weight(1f)
             ) {
                 Text(
-                    text = "$${cocktail.precio}",
-                    fontSize = 22.sp,
-                    color = Color.White,
-                    fontWeight = FontWeight.SemiBold
-                )
-                Text(
                     text = cocktail.nombre,
                     color = Color.White,
                     fontWeight = FontWeight.Medium

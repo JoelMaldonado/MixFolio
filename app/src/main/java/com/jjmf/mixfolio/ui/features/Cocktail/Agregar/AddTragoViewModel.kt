@@ -33,7 +33,6 @@ class AddTragoViewModel @Inject constructor(
     var nombre by mutableStateOf("")
 
     var preparacion by mutableStateOf("")
-    var precio by mutableStateOf("")
 
     var listIngredientAdd = mutableStateListOf<Ingrediente>()
 
@@ -51,9 +50,8 @@ class AddTragoViewModel @Inject constructor(
                 val cocktailDto = CocktailDto(
                     nombre = nombre,
                     preparacion = preparacion,
-                    precio = precio.toDoubleOrNull(),
                     img = subirImagenUsecase(img),
-                    ingredientes = listIngredientAdd.map { it.id },
+                    ingredientes = listIngredientAdd.map { it.toDto() },
                     favorito = false,
                     usuario = FirebaseAuth.getInstance().currentUser?.uid
                 )

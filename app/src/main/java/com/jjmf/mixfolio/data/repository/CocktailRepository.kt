@@ -9,4 +9,5 @@ interface CocktailRepository {
     suspend fun add(cocktail: CocktailDto) : EstadosResult<Boolean>
     suspend fun update(cocktail: Cocktail) : EstadosResult<Boolean>
     suspend fun get(id: String) : Cocktail?
+    suspend fun delete(id:String) : EstadosResult<Boolean>
 }

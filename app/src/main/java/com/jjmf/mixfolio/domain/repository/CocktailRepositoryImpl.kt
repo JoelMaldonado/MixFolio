@@ -39,7 +39,7 @@ class CocktailRepositoryImpl @Inject constructor(
 
     override suspend fun update(cocktail: Cocktail): EstadosResult<Boolean> {
         return try {
-            fb.document(cocktail.id).update("favorito", cocktail.favorito)
+            fb.document(cocktail.id).update("favorito", cocktail.favorito).await()
             EstadosResult.Correcto(true)
         } catch (e: Exception) {
             EstadosResult.Error(e.message.toString())
@@ -47,12 +47,16 @@ class CocktailRepositoryImpl @Inject constructor(
     }
 
     override suspend fun get(id: String): Cocktail? {
-        val d = fb.document(id).get().await()
-        val obj = d.toCocktailDto()
-        val listIngredientes = obj?.ingredientes?.map { map ->
-            map?.let { it1 -> repository.get(it1) }
-        }?.filterNotNull() ?: emptyList()
-        return obj?.toDomain(d.id)?.copy(ingredientes = listIngredientes)
+        return fb.document(id).get().await().toCocktailDto()?.toDomain(id)
+    }
+
+    override suspend fun delete(id: String): EstadosResult<Boolean> {
+        return try {
+            fb.document(id).delete().await()
+            EstadosResult.Correcto(true)
+        } catch (e: Exception) {
+            EstadosResult.Error(e.message.toString())
+        }
     }
 
 }

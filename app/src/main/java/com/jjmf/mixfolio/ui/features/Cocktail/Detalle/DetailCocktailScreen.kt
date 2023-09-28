@@ -1,31 +1,22 @@
 package com.jjmf.mixfolio.ui.features.Cocktail.Detalle
 
-import androidx.annotation.DrawableRes
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Divider
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.ListItem
+import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -35,32 +26,33 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
-import coil.compose.SubcomposeAsyncImage
-import com.jjmf.mixfolio.R
+import com.jjmf.mixfolio.domain.model.Ingrediente
 import com.jjmf.mixfolio.ui.theme.ColorCard
-import com.jjmf.mixfolio.ui.theme.ColorDivider
 import com.jjmf.mixfolio.ui.theme.ColorFondo
 import com.jjmf.mixfolio.ui.theme.ColorP1
 import com.jjmf.mixfolio.ui.theme.ColorP2
-import com.jjmf.mixfolio.ui.theme.ColorTextos
-import com.jjmf.mixfolio.ui.theme.ColorTitulo
 
 @Composable
 fun DetailCocktailScreen(
     id: String,
+    back:()->Unit,
     viewModel: DetalleViewModel = hiltViewModel(),
 ) {
 
     LaunchedEffect(key1 = Unit) {
         viewModel.init(id)
+    }
+
+    if (viewModel.back){
+        LaunchedEffect(key1 = Unit){
+            back()
+            viewModel.back = false
+        }
     }
 
     Column(
@@ -82,6 +74,11 @@ fun DetailCocktailScreen(
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop
             )
+            IconButton(onClick = {
+                                 viewModel.delete(id)
+            }, modifier = Modifier.align(Alignment.TopEnd)) {
+                Icon(imageVector = Icons.Default.Delete, contentDescription = null, tint = Color.White)
+            }
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -105,59 +102,6 @@ fun DetailCocktailScreen(
                 )
             }
         }
-        /*
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(250.dp)
-                ) {
-
-                    Column(
-                        modifier = Modifier.weight(1f),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(5.dp)
-                    ) {
-                        Text(
-                            text = "${viewModel.cocktail?.nombre}",
-                            color = Color.White,
-                            fontWeight = FontWeight.Medium
-                        )
-                        Divider(
-                            modifier = Modifier.width(60.dp),
-                            color = ColorDivider
-                        )
-                        Text(text = "Preparación", fontSize = 12.sp, color = ColorTitulo)
-                        Text(
-                            text = viewModel.cocktail?.preparacion.toString(),
-                            fontSize = 14.sp,
-                            color = ColorTextos, lineHeight = 16.sp
-                        )
-                    }
-
-                    SubcomposeAsyncImage(
-                        model = viewModel.cocktail?.img,
-                        contentDescription = null,
-                        error = {
-                            Image(
-                                painter = painterResource(id = R.drawable.img_trago),
-                                contentDescription = null
-                            )
-                        },
-                        modifier = Modifier
-                            .weight(1f)
-                            .fillMaxHeight()
-                            .clip(RoundedCornerShape(15.dp)),
-                        contentScale = ContentScale.FillHeight,
-                        loading = {
-                            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                                CircularProgressIndicator()
-                            }
-                        }
-                    )
-
-                }*/
-
-
 
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -177,7 +121,6 @@ fun DetailCocktailScreen(
         }
 
         Text(text = viewModel.cocktail?.preparacion ?: "Sin Data", color = Color.White)
-
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(5.dp)
@@ -195,20 +138,10 @@ fun DetailCocktailScreen(
             )
         }
 
-        Row(
-            modifier = Modifier.horizontalScroll(rememberScrollState()),
-            horizontalArrangement = Arrangement.spacedBy(15.dp)
-        ) {
-            viewModel.cocktail?.ingredientes?.forEach {
-                CardIngrediente(
-                    modifier = Modifier.width(70.dp),
-                    text = it.nombre,
-                    img = it.img
-                ) {
-
-                }
-            }
-
+        viewModel.cocktail?.ingredientes?.forEach {
+            CardIngrediente(
+                ingrediente = it
+            )
         }
 
     }
@@ -216,40 +149,33 @@ fun DetailCocktailScreen(
 
 @Composable
 fun CardIngrediente(
-    modifier: Modifier,
-    text: String,
-    img: String,
-    click: () -> Unit,
+    ingrediente: Ingrediente,
 ) {
-    Card(
-        modifier = modifier,
-        colors = CardDefaults.cardColors(
-            containerColor = ColorFondo
-        )
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(5.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
+    ListItem(
+        leadingContent = {
             AsyncImage(
-                model = img,
+                model = ingrediente.img,
                 contentDescription = null,
                 modifier = Modifier.size(70.dp),
                 contentScale = ContentScale.FillHeight
             )
+        },
+        headlineContent = {
             Text(
-                text = text,
+                text = ingrediente.nombre,
                 color = ColorP1,
-                fontWeight = FontWeight.Medium,
-                fontSize = 14.sp,
-                modifier = Modifier.padding(top = 10.dp),
-                textAlign = TextAlign.Center
+                fontWeight = FontWeight.Medium
             )
-            IconButton(onClick = click) {
-                Icon(imageVector = Icons.Default.Add, contentDescription = null)
-            }
-        }
-    }
+        },
+        supportingContent = {
+            Text(
+                text = ingrediente.cant,
+                color = Color.White,
+                fontSize = 14.sp
+            )
+        },
+        colors = ListItemDefaults.colors(
+            containerColor = Color.Transparent
+        )
+    )
 }
