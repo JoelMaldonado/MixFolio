@@ -101,10 +101,8 @@ fun BuscarIngredientes(
                 }
             }
         },
-        shape = RoundedCornerShape(10.dp),
-
-
-        ) {
+        shape = RoundedCornerShape(10.dp)
+    ) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()

@@ -6,5 +6,6 @@ data class Cocktail(
     val preparacion:String,
     val img:String,
     val favorito:Boolean,
-    val ingredientes: List<Ingrediente>
+    val ingredientes: List<Ingrediente>,
+    val usuario: String
 )

@@ -1,10 +1,12 @@
 package com.jjmf.mixfolio.ui.features.Cocktail
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.auth.FirebaseAuth
 import com.jjmf.mixfolio.core.EstadosResult
 import com.jjmf.mixfolio.data.repository.CocktailRepository
 import com.jjmf.mixfolio.domain.model.Cocktail
@@ -15,7 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CocktailViewModel @Inject constructor(
-    private val repository: CocktailRepository
+    private val repository: CocktailRepository,
 ) : ViewModel() {
 
     var buscar by mutableStateOf("")
@@ -25,26 +27,31 @@ class CocktailViewModel @Inject constructor(
     var listCocktails by mutableStateOf<List<Cocktail>>(emptyList())
 
     fun init() {
-        viewModelScope.launch(Dispatchers.IO){
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 cargando = true
                 listCocktails = repository.getList()
-            }catch (e:Exception){
+                    .filter {
+                        Log.d("tagitoList", it.usuario)
+                        it.usuario == FirebaseAuth.getInstance().currentUser?.uid
+                    }
+                Log.d("tagitoAuth", FirebaseAuth.getInstance().currentUser?.uid.toString())
+            } catch (e: Exception) {
                 error = e.message
-            }finally {
+            } finally {
                 cargando = false
             }
         }
     }
 
     fun changeFavorito(cocktail: Cocktail) {
-        viewModelScope.launch(Dispatchers.IO){
+        viewModelScope.launch(Dispatchers.IO) {
             try {
-                when(val res = repository.update(cocktail.copy(favorito = !cocktail.favorito))){
+                when (val res = repository.update(cocktail.copy(favorito = !cocktail.favorito))) {
                     is EstadosResult.Correcto -> {}
                     is EstadosResult.Error -> error = res.mensajeError
                 }
-            }catch (e:Exception){
+            } catch (e: Exception) {
                 error = e.message
             }
         }

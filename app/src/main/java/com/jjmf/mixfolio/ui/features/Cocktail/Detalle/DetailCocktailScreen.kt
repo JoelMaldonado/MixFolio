@@ -10,7 +10,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Icon
@@ -26,21 +28,24 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import cn.pedant.SweetAlert.SweetAlertDialog
 import coil.compose.AsyncImage
 import com.jjmf.mixfolio.domain.model.Ingrediente
 import com.jjmf.mixfolio.ui.theme.ColorCard
 import com.jjmf.mixfolio.ui.theme.ColorFondo
 import com.jjmf.mixfolio.ui.theme.ColorP1
 import com.jjmf.mixfolio.ui.theme.ColorP2
+import com.jjmf.mixfolio.ui.theme.ColorS1
 
 @Composable
 fun DetailCocktailScreen(
     id: String,
-    back:()->Unit,
+    back: () -> Unit,
     viewModel: DetalleViewModel = hiltViewModel(),
 ) {
 
@@ -48,8 +53,10 @@ fun DetailCocktailScreen(
         viewModel.init(id)
     }
 
-    if (viewModel.back){
-        LaunchedEffect(key1 = Unit){
+    val context = LocalContext.current
+
+    if (viewModel.back) {
+        LaunchedEffect(key1 = Unit) {
             back()
             viewModel.back = false
         }
@@ -58,7 +65,8 @@ fun DetailCocktailScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(ColorFondo),
+            .background(ColorFondo)
+            .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(15.dp)
     ) {
 
@@ -74,10 +82,30 @@ fun DetailCocktailScreen(
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop
             )
-            IconButton(onClick = {
-                                 viewModel.delete(id)
-            }, modifier = Modifier.align(Alignment.TopEnd)) {
-                Icon(imageVector = Icons.Default.Delete, contentDescription = null, tint = Color.White)
+            IconButton(
+                onClick = {
+                    SweetAlertDialog(context, SweetAlertDialog.WARNING_TYPE).apply {
+                        titleText = "Cuidado"
+                        contentText = "Se eliminara el cocktail"
+                        confirmButtonBackgroundColor = ColorP1.hashCode()
+                        cancelButtonBackgroundColor = ColorS1.hashCode()
+                        setCancelButton("Cancelar") {
+                            dismissWithAnimation()
+                        }
+                        setConfirmButton("Confirmar") {
+                            viewModel.delete(id)
+                            dismissWithAnimation()
+                        }
+                        show()
+                    }
+                },
+                modifier = Modifier.align(Alignment.TopEnd)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Delete,
+                    contentDescription = null,
+                    tint = ColorP1
+                )
             }
             Box(
                 modifier = Modifier

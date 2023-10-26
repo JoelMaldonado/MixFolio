@@ -158,10 +158,12 @@ fun CocktailScreen(
                 )
             )
             LazyVerticalGrid(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(15.dp),
                 columns = GridCells.Fixed(2),
-                horizontalArrangement = Arrangement.spacedBy(20.dp),
-                verticalArrangement = Arrangement.spacedBy(20.dp)
+                horizontalArrangement = Arrangement.spacedBy(15.dp),
+                verticalArrangement = Arrangement.spacedBy(15.dp)
             ) {
                 items(viewModel.listCocktails) {
                     ItemCocktail(

@@ -1,15 +1,19 @@
 package com.jjmf.mixfolio.ui.components
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -24,6 +28,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import coil.compose.SubcomposeAsyncImage
 import com.jjmf.mixfolio.R
 import com.jjmf.mixfolio.domain.model.Cocktail
 import com.jjmf.mixfolio.ui.theme.ColorP1
@@ -41,7 +46,7 @@ fun ItemCocktail(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        AsyncImage(
+        SubcomposeAsyncImage(
             model = cocktail.img,
             contentDescription = null,
             modifier = Modifier
@@ -50,25 +55,28 @@ fun ItemCocktail(
                 .clip(RoundedCornerShape(10.dp))
                 .clickable { click() },
             contentScale = ContentScale.Crop,
-            error = painterResource(id = R.drawable.pisco_sour)
+            error ={
+                Image(painter = painterResource(id = R.drawable.pisco_sour), contentDescription = null)
+            },
+            loading = {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ){
+                    CircularProgressIndicator()
+                }
+            }
         )
         Row(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Column(
+            Text(
+                text = cocktail.nombre,
+                color = Color.White,
+                fontWeight = FontWeight.Medium,
                 modifier = Modifier.weight(1f)
-            ) {
-                Text(
-                    text = cocktail.nombre,
-                    color = Color.White,
-                    fontWeight = FontWeight.Medium
-                )
-                Text(
-                    text = cocktail.id,
-                    color = Color.White,
-                    fontSize = 12.sp
-                )
-            }
+            )
 
             IconButton(
                 onClick = clickFavorito
